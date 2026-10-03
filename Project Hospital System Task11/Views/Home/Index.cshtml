@@ -1,0 +1,31 @@
+﻿@{
+    ViewData["Title"] = "Hospital Appointment System";
+}
+
+<div class="text-center py-5">
+
+    <h1 class="display-4 fw-bold">
+        Hospital Appointment System
+    </h1>
+
+    <p class="lead mt-3">
+        Book your appointment easily and quickly.
+    </p>
+
+    <div class="mt-4">
+
+        <a asp-controller="Doctors"
+           asp-action="Index"
+           class="btn btn-primary btn-lg me-2">
+            Make Appointment
+        </a>
+
+        <a asp-controller="Appointments"
+           asp-action="Index"
+           class="btn btn-outline-primary btn-lg">
+            View Appointments
+        </a>
+
+    </div>
+
+</div>

@@ -1,0 +1,169 @@
+﻿@model Project_Hospital_System_Task11.Models.DoctorIndexViewModel
+
+@{
+    ViewData["Title"] = "Doctors";
+}
+
+<div class="container py-4">
+
+    <div class="text-center mb-4">
+        <h1>Our Doctors</h1>
+        <p class="text-muted">
+            Choose a doctor and book your appointment.
+        </p>
+    </div>
+
+    <!-- Search & Filter -->
+
+    <form method="get"
+          asp-controller="Doctors"
+          asp-action="Index"
+          class="row g-3 mb-4">
+
+        <div class="col-md-5">
+
+            <input type="text"
+                   name="search"
+                   value="@Model.Search"
+                   class="form-control"
+                   placeholder="Search doctor name..." />
+
+        </div>
+
+        <div class="col-md-4">
+
+            <select name="specializationId"
+                    class="form-select">
+
+                <option value="">
+                    All Specializations
+                </option>
+
+                @foreach (var specialization
+                    in Model.Specializations)
+                {
+                    <option value="@specialization.SpecializationId"
+                            selected="@(Model.SpecializationId == specialization.SpecializationId)">
+                        @specialization.Name
+                    </option>
+                }
+
+            </select>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <button type="submit"
+                    class="btn btn-primary w-100">
+                Search / Filter
+            </button>
+
+        </div>
+
+    </form>
+
+    <!-- Doctors -->
+
+    <div class="row">
+
+        @if (Model.Doctors.Any())
+        {
+            @foreach (var doctor in Model.Doctors)
+            {
+                <div class="col-md-4 mb-4">
+
+                    <div class="card h-100 shadow-sm">
+
+                        <img src="@doctor.Image"
+                             class="card-img-top"
+                             alt="@doctor.Name"
+                             style="height:250px; object-fit:cover;" />
+
+                        <div class="card-body text-center">
+
+                            <h5 class="card-title">
+                                @doctor.Name
+                            </h5>
+
+                            <p class="card-text text-muted">
+                                @doctor.Specialization.Name
+                            </p>
+
+                            <a asp-controller="Appointments"
+                               asp-action="Book"
+                               asp-route-id="@doctor.DoctorId"
+                               class="btn btn-primary">
+                                Book Appointment
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+            }
+        }
+        else
+        {
+            <div class="text-center">
+                <p class="alert alert-warning">
+                    No doctors found.
+                </p>
+            </div>
+        }
+
+    </div>
+
+    <!-- Pagination -->
+    @if (Model.TotalPages > 1)
+    {
+        <nav class="mt-4">
+
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item @(Model.CurrentPage == 1 ? "disabled" : "")">
+
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(Model.CurrentPage - 1)"
+                       asp-route-search="@Model.Search"
+                       asp-route-specializationId="@Model.SpecializationId">
+                        Previous
+                    </a>
+
+                </li>
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@i"
+                           asp-route-search="@Model.Search"
+                           asp-route-specializationId="@Model.SpecializationId">
+                            @i
+                        </a>
+
+                    </li>
+                }
+
+                <li class="page-item @(Model.CurrentPage == Model.TotalPages ? "disabled" : "")">
+
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-route-page="@(Model.CurrentPage + 1)"
+                       asp-route-search="@Model.Search"
+                       asp-route-specializationId="@Model.SpecializationId">
+                        Next
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+    }
+
+</div>
